@@ -7,8 +7,18 @@ class Block {
    this.hash = hash
    this.data = data
  }
-  static genesis() {
+   static genesis() {
     return new this(GENESIS_DATA);     
+  }
+
+  static mineBlock({ lastBlock, data}) {
+    return new this({
+      timestamp: Date.now(),
+      data,
+      lastHash: lastBlock.hash
+      
+
+    })
   }
 
 }
