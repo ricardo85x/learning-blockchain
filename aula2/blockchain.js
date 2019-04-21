@@ -14,13 +14,33 @@ class Blockchain {
         this.chain.push(newBlock)
     }
 
-    static isValidChain( le_chain ){
+    replaceChain( novo_chain){
 
+        // nao faz o replace se o novo for menor ou mesmo tamanho
+        if( novo_chain.length <= this.chain.length) {
+            console.error('the incomming chain must be longer')
+             return
+        }
+
+        // nao faz o replace se o novo for invalido
+        if(!Blockchain.isValidChain(novo_chain)){
+            console.error('the incomming chain must be valid')
+            return
+        }
+
+        console.log('replacing  chain with', novo_chain)
+        // faz o replace tudo numa boa
+        this.chain = novo_chain;
+    }
+
+    static isValidChain( le_chain ){
 
         // check valid genesis
         if(  JSON.stringify(le_chain[0]) !== JSON.stringify(Block.genesis()) ){
             return false;
         } 
+
+
 
         for (let i = 1 ; i< le_chain.length; i++ ) {
 
@@ -29,6 +49,7 @@ class Blockchain {
             const lastHashAtual = le_chain[i - 1].hash;
 
             if (lastHashAtual !== lastHash ){
+
                 return false;
             }
 
