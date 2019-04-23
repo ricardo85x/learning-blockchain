@@ -45,7 +45,7 @@ class Blockchain {
         for (let i = 1 ; i< le_chain.length; i++ ) {
 
             // vai criar uma variavel para cada atributo  do bloco
-            const { timestamp, lastHash, hash, data }  = le_chain[i]
+            const { timestamp, lastHash, hash, nonce, difficulty,  data }  = le_chain[i]
             const lastHashAtual = le_chain[i - 1].hash;
 
             if (lastHashAtual !== lastHash ){
@@ -53,7 +53,7 @@ class Blockchain {
                 return false;
             }
 
-            const validatedHash = cryptoHash(timestamp, lastHash, data);
+            const validatedHash = cryptoHash(timestamp, lastHash, nonce, difficulty, data);
 
             if (validatedHash !=  hash){
                 return false;

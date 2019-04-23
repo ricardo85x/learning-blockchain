@@ -7,11 +7,18 @@ describe('Block', () => {
     const lastHash = 'foo-hash';
     const hash = 'bar-hash';
     const data = ['blockchain', 'data'];
+
+    const nonce = 1;
+    const difficulty = 1;
+
     const block = new Block({
         timestamp,
         lastHash,
         hash,
-        data
+        data,
+
+        nonce,
+        difficulty
     });
 
     it('hash a timestamp, lastHash, hash and data property', () => {
@@ -19,6 +26,9 @@ describe('Block', () => {
         expect(block.lastHash).toEqual(lastHash);
         expect(block.hash).toEqual(hash);
         expect(block.data).toEqual(data);
+
+        expect(block.nonce).toEqual(nonce);
+        expect(block.difficulty).toEqual(difficulty);
     })
 
     describe('genesis()', () => {
@@ -41,6 +51,7 @@ describe('Block', () => {
         const foo_hash = '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae'
 
         console.log("le hash", mineBlock.hash)
+        console.log('le nonce', mineBlock.nonce)
         it('returns a Block instance', () => {
             expect(mineBlock instanceof Block).toBe(true); 
         });
@@ -57,12 +68,21 @@ describe('Block', () => {
             expect(mineBlock.timestamp).not.toEqual(undefined);
         } )
 
-        // it('set a `hash` ', () => {
-        //     expect(mineBlock.hash).not.toEqual(undefined);
-        // })
-
         it('create a SHA-256 `hash` basead on the proper input ', () => {
-            expect(mineBlock.hash).toEqual(cryptoHash(mineBlock.timestamp, lastBlock.hash, data))
+            expect(mineBlock.hash).toEqual(
+                cryptoHash(
+                    mineBlock.timestamp, 
+                    mineBlock.nonce, 
+                    mineBlock.difficulty,  
+                    lastBlock.hash, 
+                    data
+                )
+            );
+        })
+
+        it('sets a `hash` that matches the difficulty criteria', () => {
+            expect(mineBlock.hash.substring(0, mineBlock.difficulty))
+                .toEqual('0'.repeat(mineBlock.difficulty))
         })
 
     });
