@@ -33,6 +33,8 @@ class Blockchain {
         this.chain = novo_chain;
     }
 
+
+
     static isValidChain( le_chain ){
 
         // check valid genesis
