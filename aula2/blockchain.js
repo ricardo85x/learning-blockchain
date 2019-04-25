@@ -50,6 +50,10 @@ class Blockchain {
             const { timestamp, lastHash, hash, nonce, difficulty,  data }  = le_chain[i]
             const lastHashAtual = le_chain[i - 1].hash;
 
+            const lastDifficulty = le_chain[i - 1].difficulty;
+
+            if(  Math.abs(lastDifficulty - difficulty) > 1 ) return false;
+
             if (lastHashAtual !== lastHash ){
 
                 return false;
