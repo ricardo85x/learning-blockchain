@@ -12,8 +12,8 @@ class PubSub {
         this.publisher = redis.createClient();
         this.subscriber = redis.createClient();
 
-        this.subscriber.subscribe(CHANNELS.TEST);
-        this.subscriber.subscribe(CHANNELS.BLOCKCHAIN);
+        // this.subscriber.subscribe(CHANNELS.TEST);
+        // this.subscriber.subscribe(CHANNELS.BLOCKCHAIN);
 
         this.subscribeToChannel();
 
@@ -30,7 +30,12 @@ class PubSub {
     }
 
     publish( { channel, message}) {
-        this.publisher.publish(channel, message)
+
+        this.subscriber.unsubscribe(channel, () => {
+            this.publisher.publish(channel, message, () => {
+                this.subscriber.subscribe(channel);
+            })
+        })
     }
 
     handleMessage(channel, message)  {
